@@ -979,7 +979,7 @@ NemoApplication *
 nemo_main_application_get_singleton (void)
 {
     return nemo_application_initialize_singleton (NEMO_TYPE_MAIN_APPLICATION,
-                                                  "application-id", "org.Nemo",
+                                                  "application-id", "org.IcarusFM",
                                                   "flags", G_APPLICATION_HANDLES_OPEN,
                                                   "register-session", TRUE,
                                                   NULL);

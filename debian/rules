@@ -4,7 +4,7 @@
 export LC_ALL=C.UTF-8
 
 CONFIGURE_EXTRA_FLAGS = \
-	--libexecdir=/usr/lib/$(DEB_HOST_MULTIARCH)/nemo \
+	--libexecdir=/usr/lib/$(DEB_HOST_MULTIARCH)/icarus-fm \
 	--buildtype=debugoptimized \
 	-D deprecated_warnings=false \
 	-D gtk_doc=true \
@@ -25,10 +25,10 @@ override_dh_auto_test:
 	:
 
 override_dh_strip:
-	dh_strip --dbg-package=nemo-dbg
+	dh_strip --dbg-package=icarus-fm-dbg
 
 override_dh_python3:
-	dh_python3 -p nemo-data /usr/share/nemo
+	dh_python3 -p icarus-fm-data /usr/share/icarus-fm
 
 # workaround for fix lmde4 build
 override_dh_dwz:

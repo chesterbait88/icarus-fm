@@ -4,7 +4,7 @@ mso_to_txt_sources = [
   'nemo-mso-to-txt.c'
 ]
 
-mso_to_txt = executable('nemo-mso-to-txt',
+mso_to_txt = executable('icarus-fm-mso-to-txt',
   mso_to_txt_sources,
   dependencies: [libgsf, gio, glib],
   install: true
@@ -14,7 +14,7 @@ ppt_to_txt_sources = [
   'nemo-ppt-to-txt.c'
 ]
 
-ppt_to_txt = executable('nemo-ppt-to-txt',
+ppt_to_txt = executable('icarus-fm-ppt-to-txt',
   ppt_to_txt_sources,
   dependencies: [gio, glib],
   install: true
@@ -23,7 +23,8 @@ ppt_to_txt = executable('nemo-ppt-to-txt',
 install_data(
     ['nemo-xls-to-txt', 'nemo-odf-to-txt'],
     install_dir: join_paths(get_option('prefix'), get_option('bindir')),
-    install_mode: 'rwxr-xr-x'
+    install_mode: 'rwxr-xr-x',
+    rename: ['icarus-fm-xls-to-txt', 'icarus-fm-odf-to-txt']
 )
 
 install_data(
@@ -37,7 +38,8 @@ install_data(
 
 install_data(
     'nemo-epub2text',
-    install_dir: get_option('bindir')
+    install_dir: get_option('bindir'),
+    rename: 'icarus-fm-epub2text'
 )
 
 subdir('third-party')

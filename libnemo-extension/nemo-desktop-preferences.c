@@ -51,7 +51,7 @@ nemo_desktop_preferences_init (NemoDesktopPreferences *preferences)
 
     preferences->priv = priv;
 
-    priv->desktop_settings = g_settings_new ("org.nemo.desktop");
+    priv->desktop_settings = g_settings_new ("org.icarus-fm.desktop");
 
     priv->builder = gtk_builder_new ();
     gtk_builder_set_translation_domain (priv->builder, GETTEXT_PACKAGE);

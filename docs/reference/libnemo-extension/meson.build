@@ -8,13 +8,13 @@ configure_file(
   configuration: docConf
 )
 
-gnome.gtkdoc('libnemo-extension',
+gnome.gtkdoc('libicarus-fm-extension',
   main_xml: 'libnemo-extension-docs.xml',
   src_dir: join_paths(meson.project_source_root(), 'libnemo-extension'),
   dependencies: nemo_extension,
   install: true,
   gobject_typesfile: 'libnemo-extension.types',
-  install_dir: 'libnemo-extension',
+  install_dir: 'libicarus-fm-extension',
   scan_args: [
     '--rebuild-types',
     '--ignore-headers="config.h"' ]

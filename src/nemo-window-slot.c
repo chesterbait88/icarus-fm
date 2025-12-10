@@ -1326,6 +1326,23 @@ update_preview_for_file (NemoWindowSlot *slot, NemoFile *file)
 	g_free (name);
 }
 
+/* Forward declaration */
+static void on_selection_changed (NemoView *view, NemoWindowSlot *slot);
+
+static void
+on_preview_pane_size_allocate (GtkWidget *widget,
+                               GdkRectangle *allocation,
+                               NemoWindowSlot *slot)
+{
+	/* Only re-render if width actually changed significantly */
+	if (slot->preview_visible &&
+	    slot->content_view != NULL &&
+	    ABS(allocation->width - slot->last_preview_width) > 10) {
+		slot->last_preview_width = allocation->width;
+		on_selection_changed (slot->content_view, slot);
+	}
+}
+
 static void
 on_selection_changed (NemoView *view, NemoWindowSlot *slot)
 {
@@ -1715,9 +1732,14 @@ nemo_window_slot_init (NemoWindowSlot *slot)
 	slot->preview_pane = create_preview_pane (slot);
 	gtk_paned_pack2 (GTK_PANED (slot->content_paned), slot->preview_pane, FALSE, FALSE);
 
-	/* Start with preview hidden */
-	slot->preview_visible = FALSE;
-	gtk_widget_hide (slot->preview_pane);
+	/* Connect size-allocate to resize previews when pane is resized */
+	g_signal_connect (slot->preview_pane, "size-allocate",
+			  G_CALLBACK (on_preview_pane_size_allocate), slot);
+
+	/* Start with preview visible by default */
+	slot->preview_visible = TRUE;
+	slot->last_preview_width = 0;
+	gtk_widget_show (slot->preview_pane);
 
 	slot->cache_bar = NULL;
 	slot->selection_changed_id = 0;

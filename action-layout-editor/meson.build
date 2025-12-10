@@ -17,7 +17,7 @@ bin_conf.set('PKG_DATADIR', nemoDataPath)
 
 bin = configure_file(
   input: 'nemo-action-layout-editor.in',
-  output: 'nemo-action-layout-editor',
+  output: 'icarus-fm-action-layout-editor',
   configuration: bin_conf,
   install: true,
   install_dir: get_option('bindir'),

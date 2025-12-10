@@ -1,5 +1,5 @@
 [Nemo Search Helper]
-TryExec=nemo-odf-to-txt;
-Exec=nemo-odf-to-txt %s
+TryExec=icarus-fm-odf-to-txt;
+Exec=icarus-fm-odf-to-txt %s
 MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.spreadsheet;application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.graphics;
 Priority=100

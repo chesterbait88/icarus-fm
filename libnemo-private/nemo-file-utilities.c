@@ -1687,7 +1687,7 @@ nemo_treating_root_as_normal (void)
     // We only need to set this at startup then cache the result, as we check
     // quite a bit in various parts of the code.
     if (g_once_init_enter (&once_init)) {
-        GSettings *prefs = g_settings_new("org.nemo.preferences");
+        GSettings *prefs = g_settings_new("org.icarus-fm.preferences");
 
         root_is_normal = g_settings_get_boolean (prefs, "treat-root-as-normal");
         g_object_unref (prefs);

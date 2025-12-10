@@ -121,7 +121,7 @@ if poppler_enabled
   nemo_deps += poppler
 endif
 
-nemo = executable('nemo',
+nemo = executable('icarus-fm',
   nemoCommon_sources + nemoWindow_sources,
   include_directories: [ rootInclude ],
   c_args: nemo_definitions,
@@ -129,7 +129,7 @@ nemo = executable('nemo',
   install: true
 )
 
-nemoDesktop = executable('nemo-desktop',
+nemoDesktop = executable('icarus-fm-desktop',
   nemoCommon_sources + nemoDesktop_sources,
   include_directories: [ rootInclude],
   c_args: nemo_definitions,
@@ -137,7 +137,7 @@ nemoDesktop = executable('nemo-desktop',
   install: true
 )
 
-nemo_autorun_software = executable('nemo-autorun-software',
+nemo_autorun_software = executable('icarus-fm-autorun-software',
   [ 'nemo-autorun-software.c' ],
   include_directories: [ rootInclude, ],
   c_args: nemo_definitions,
@@ -145,7 +145,7 @@ nemo_autorun_software = executable('nemo-autorun-software',
   install: true
 )
 
-nemo_connect_server = executable('nemo-connect-server',
+nemo_connect_server = executable('icarus-fm-connect-server',
   [
     'nemo-bookmark-list.c',
     'nemo-connect-server-dialog.c',
@@ -158,7 +158,7 @@ nemo_connect_server = executable('nemo-connect-server',
   install: true
 )
 
-nemo_open_with = executable('nemo-open-with',
+nemo_open_with = executable('icarus-fm-open-with',
   [ 'nemo-open-with-main.c' ],
   include_directories: [ rootInclude, ],
   c_args: nemo_definitions,
@@ -167,7 +167,7 @@ nemo_open_with = executable('nemo-open-with',
 )
 
 # LibExecs
-nemo_extensions_list = executable('nemo-extensions-list',
+nemo_extensions_list = executable('icarus-fm-extensions-list',
   [ 'nemo-extensions-list.c' ],
   include_directories: [ rootInclude, ],
   c_args: nemo_definitions,

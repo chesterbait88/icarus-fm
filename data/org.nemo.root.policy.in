@@ -5,11 +5,11 @@
 
 <policyconfig>
 
- <vendor>Nemo Project</vendor>
- <vendor_url>https://github.com/linuxmint/nemo</vendor_url>
+ <vendor>Icarus-FM Project</vendor>
+ <vendor_url>https://github.com/chesterbait88/icarus-fm</vendor_url>
 
- <action id="org.nemo.root">
-   <description>Run Nemo with elevated privileges</description>
+ <action id="org.icarus-fm.root">
+   <description>Run Icarus-FM with elevated privileges</description>
    <message gettext-domain="nemo">Files</message>
    <icon_name>gksu-root-terminal</icon_name>
    <defaults>
@@ -17,7 +17,7 @@
      <allow_inactive>auth_admin_keep</allow_inactive>
      <allow_active>auth_admin_keep</allow_active>
    </defaults>
-   <annotate key="org.freedesktop.policykit.exec.path">@bindir@/nemo</annotate>
+   <annotate key="org.freedesktop.policykit.exec.path">@bindir@/icarus-fm</annotate>
    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
  </action>
 

@@ -42,7 +42,7 @@ nemo_extension_incdir = include_directories('.')
 
 nemo_extension_deps = [ glib, gtk ]
 
-nemo_extension_lib = shared_library('nemo-extension',
+nemo_extension_lib = shared_library('icarus-fm-extension',
   nemo_extension_sources + nemo_i18n_header,
   dependencies: nemo_extension_deps,
   include_directories: [ rootInclude, ],
@@ -52,7 +52,7 @@ nemo_extension_lib = shared_library('nemo-extension',
 )
 
 install_headers(nemo_extension_headers,
-  subdir: join_paths('nemo', 'libnemo-extension')
+  subdir: join_paths('icarus-fm', 'libicarus-fm-extension')
 )
 
 nemo_extension = declare_dependency(
@@ -68,21 +68,21 @@ typelibdir = go_intr.get_variable(pkgconfig: 'typelibdir',
 gnome.generate_gir(nemo_extension_lib,
   sources: nemo_extension_sources + nemo_extension_headers,
   nsversion: '3.0',
-  namespace: 'Nemo',
-  export_packages: 'libnemo-extension',
+  namespace: 'IcarusFM',
+  export_packages: 'libicarus-fm-extension',
   includes: [ 'Gtk-3.0', 'Gio-2.0', 'GLib-2.0', ],
   include_directories: [ rootInclude, ],
   install_dir_typelib: typelibdir,
   install: true,
 )
 
-pkgconfig.generate(filebase: 'libnemo-extension',
-  name: 'libnemo-extension',
-  description: 'A library to create Nemo view extensions',
+pkgconfig.generate(filebase: 'libicarus-fm-extension',
+  name: 'libicarus-fm-extension',
+  description: 'A library to create Icarus-FM view extensions',
   version: meson.project_version(),
   requires: [ 'gio-2.0', 'glib-2.0', 'gtk+-3.0' ],
   libraries: nemo_extension_lib,
-  subdirs: 'nemo',
-  variables: 'extensiondir=${libdir}/@0@/@1@'.format('nemo', 'extensions-3.0'),
+  subdirs: 'icarus-fm',
+  variables: 'extensiondir=${libdir}/@0@/@1@'.format('icarus-fm', 'extensions-3.0'),
 )
 

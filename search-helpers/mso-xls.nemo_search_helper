@@ -1,5 +1,5 @@
 [Nemo Search Helper]
-TryExec=nemo-xls-to-txt;
-Exec=nemo-xls-to-txt %s
+TryExec=icarus-fm-xls-to-txt;
+Exec=icarus-fm-xls-to-txt %s
 MimeType=application/vnd.ms-excel;
 Priority=100

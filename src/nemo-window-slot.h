@@ -135,6 +135,7 @@ struct NemoWindowSlot {
 	GtkWidget *preview_video_error_box; /* Container for video error/fallback */
 	GtkWidget *preview_label;      /* Label for filename */
 	gboolean   preview_visible;    /* Whether preview pane is shown */
+	gint       last_preview_width; /* Last width for resize detection */
 	gulong     selection_changed_id; /* Signal handler ID for selection changes */
 
 	/* Video playback state */

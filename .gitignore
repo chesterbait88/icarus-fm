@@ -38,6 +38,10 @@ debian/nemo-dbg/*
 debian/nemo-data/*
 debian/libnemo-extension*/*
 debian/gir1.2*/*
+debian/icarus-fm/*
+debian/icarus-fm-dbg/*
+debian/icarus-fm-data/*
+debian/libicarus-fm-extension*/*
 debian/*.log
 debian/.debhelper
 debian/debhelper-build-stamp

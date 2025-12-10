@@ -37,11 +37,12 @@ Based on Nemo 6.6.1 codebase with ~800 lines of new preview code, fully rebrande
 
 ### 🎨 User Experience
 
-- **F7 Keyboard Shortcut**: Instantly toggle preview pane on/off
-- **Resizable**: Drag the divider to adjust preview size
-- **Smooth Integration**: Feels native to Nemo, not a bolt-on
+- **Enabled by Default**: Preview pane opens automatically - no setup required
+- **Live Resize**: Previews instantly resize as you drag the divider
+- **F7 Keyboard Shortcut**: Toggle preview pane on/off
+- **Independent Identity**: Pins to taskbar separately from system Nemo
+- **Smooth Integration**: Feels native, not a bolt-on
 - **Graceful Fallback**: Works even without optional dependencies
-- **Performance**: Efficient loading with proper scaling
 
 ## Screenshots
 
@@ -222,13 +223,20 @@ This is a derivative work of Nemo, which is licensed under GPL-2.0. All changes 
 
 See [docs/PREVIEW_PANE_CHANGELOG.md](docs/PREVIEW_PANE_CHANGELOG.md) for detailed development history.
 
-### Latest Release: v1.0.0
+### Latest Release: v1.1.0
 
-- **COMPLETE REBRAND:** Renamed from nemo-preview to Icarus-FM
-- Now completely independent - does NOT conflict with system Nemo
+**New in v1.1.0:**
+- **Preview pane enabled by default** - No more going to settings to enable it
+- **Live resize** - Previews instantly re-render when you drag the divider
+- **Taskbar integration** - Pins to taskbar as its own app, not confused with system Nemo
+- **Unique application ID** - `org.IcarusFM` for proper desktop integration
+
+**v1.0.0:**
+- Complete rebrand from Nemo to Icarus-FM
+- Completely independent - does NOT conflict with system Nemo
 - Can be safely installed alongside other file managers
 - Safe for Cinnamon Desktop - will not break your system
-- Full preview pane feature with support for images, text, video, audio, PDF
+- Full preview pane with support for images, text, video, audio, PDF
 - F7 keyboard shortcut to toggle preview
 - Resizable preview pane
 - Optional dependencies with graceful fallback

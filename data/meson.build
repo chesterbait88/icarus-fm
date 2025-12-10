@@ -6,19 +6,19 @@ dataConf.set('VERSION', meson.project_version())
 desktopFiles = [
   configure_file(
     input : 'nemo-autorun-software.desktop.in',
-    output: 'nemo-autorun-software.desktop',
+    output: 'icarus-fm-autorun-software.desktop',
     configuration: dataConf,
   ),
 
   configure_file(
     input : 'nemo-autostart.desktop.in',
-    output: 'nemo-autostart.desktop',
+    output: 'icarus-fm-autostart.desktop',
     configuration: dataConf,
   ),
 
   configure_file(
     input : 'nemo.desktop.in',
-    output: 'nemo.desktop',
+    output: 'icarus-fm.desktop',
     configuration: dataConf,
   )
 ]
@@ -34,13 +34,13 @@ dataConf.set('bindir', join_paths(get_option('prefix'), get_option('bindir')))
 dbusFiles = [
   configure_file(
     input : 'nemo.service.in',
-    output: 'nemo.service',
+    output: 'org.IcarusFM.service',
     configuration: dataConf,
   ),
 
   configure_file(
     input : 'nemo.FileManager1.service.in',
-    output: 'nemo.FileManager1.service',
+    output: 'icarus-fm.FileManager1.service',
     configuration: dataConf,
   ),
 ]
@@ -51,9 +51,9 @@ install_data(dbusFiles,
 
 ################################################################################
 
-mimeFile_translated = custom_target('nemo.xml',
+mimeFile_translated = custom_target('icarus-fm.xml',
   input : ['nemo.xml.in'],
-  output: 'nemo.xml',
+  output: 'icarus-fm.xml',
   command: ['intltool-merge',
     '--quiet',
     '--xml-style',
@@ -71,7 +71,7 @@ dataConf.set('bindir', join_paths(get_option('prefix'), get_option('bindir')))
 
 rootPolicyFile = configure_file(
   input : 'org.nemo.root.policy.in',
-  output: 'org.nemo.root.policy',
+  output: 'org.icarus-fm.root.policy',
   configuration: dataConf,
 )
 
@@ -82,7 +82,8 @@ install_data(rootPolicyFile,
 foreach lang_file: ['nemo_action.lang', 'nemo_search_helper.lang']
   foreach sv_dir: ['gtksourceview-2.0', 'gtksourceview-3.0', 'gtksourceview-4']
     install_data(lang_file,
-      install_dir: join_paths(get_option('datadir'), sv_dir, 'language-specs')
+      install_dir: join_paths(get_option('datadir'), sv_dir, 'language-specs'),
+      rename: lang_file.replace('nemo', 'icarus-fm')
     )
   endforeach
 endforeach

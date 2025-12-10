@@ -1,11 +1,66 @@
-# Nemo Preview Pane - Development Changelog
+# Icarus-FM - Development Changelog
 
 ## Overview
 
-This document chronicles the development of a Windows Explorer-style preview pane for the Nemo file manager (v6.6.1). The feature provides a persistent, resizable right-side pane that displays previews of selected files.
+This document chronicles the development of Icarus-FM, an independent file manager with a Windows Explorer-style preview pane. Based on Nemo 6.6.1, fully rebranded to install alongside system file managers without conflicts.
 
-**Branch:** `feature/preview-pane`
+**Repository:** https://github.com/chesterbait88/icarus-fm
 **Base:** Nemo 6.6.1 (Linux Mint)
+
+---
+
+## Version 1.1.0 (Latest)
+
+### New Features
+
+| Feature | Description |
+|---------|-------------|
+| **Preview Enabled by Default** | Preview pane now opens automatically when launching Icarus-FM |
+| **Live Resize** | Previews instantly re-render when dragging the pane divider |
+| **Taskbar Integration** | Properly pins to taskbar as separate app from system Nemo |
+| **Unique Application ID** | Changed from `org.Nemo` to `org.IcarusFM` |
+
+### Technical Changes
+
+- Added `StartupWMClass=icarus-fm` to desktop file for proper window matching
+- Changed `g_set_prgname("nemo")` → `g_set_prgname("icarus-fm")` for correct WM_CLASS
+- Changed GApplication IDs: `org.Nemo` → `org.IcarusFM`, `org.NemoDesktop` → `org.IcarusFMDesktop`
+- Added `size-allocate` signal handler on preview pane for live resize
+- Changed default `preview_visible` from FALSE to TRUE
+- Added `last_preview_width` field to NemoWindowSlot for resize detection
+
+### Files Modified in v1.1.0
+
+| File | Changes |
+|------|---------|
+| `src/nemo-window-slot.c` | Added resize callback, enabled preview by default |
+| `src/nemo-window-slot.h` | Added `last_preview_width` field |
+| `src/nemo-window-menus.c` | Changed preview toggle default to TRUE |
+| `src/nemo-main.c` | Changed prgname to `icarus-fm` |
+| `src/nemo-desktop-main.c` | Changed prgname to `icarus-fm-desktop` |
+| `src/nemo-main-application.c` | Changed application-id to `org.IcarusFM` |
+| `src/nemo-desktop-application.c` | Changed application-id to `org.IcarusFMDesktop` |
+| `data/nemo.desktop.in` | Added `StartupWMClass=icarus-fm` |
+
+---
+
+## Version 1.0.0
+
+### Complete Rebrand
+
+Renamed from "nemo-preview" to "Icarus-FM" - a completely independent file manager that can be installed alongside system Nemo without conflicts.
+
+### Rebranding Changes
+
+| Component | Before | After |
+|-----------|--------|-------|
+| Binary | `nemo` | `icarus-fm` |
+| Desktop Binary | `nemo-desktop` | `icarus-fm-desktop` |
+| Library | `libnemo-extension` | `libicarus-fm-extension` |
+| GIR Namespace | `Nemo` | `IcarusFM` |
+| GSettings Schema | `org.nemo.*` | `org.icarus-fm.*` |
+| Data Path | `/usr/share/nemo` | `/usr/share/icarus-fm` |
+| DBus Service | `org.Nemo` | `org.IcarusFM` |
 
 ---
 

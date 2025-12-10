@@ -1599,7 +1599,7 @@ static const GtkToggleActionEntry main_toggle_entries[] = {
   /* label, accelerator */   N_("_Preview Pane"), "F7",
   /* tooltip */              N_("Show a preview of the selected file"),
                              G_CALLBACK (action_preview_pane_callback),
-  /* is_active */            FALSE },
+  /* is_active */            TRUE },
     /* name, stock id */         { NEMO_ACTION_SHOW_THUMBNAILS, NULL,
   /* label, accelerator */       N_("Show _Thumbnails"), NULL,
   /* tooltip */                  N_("Toggle the display of thumbnails in the current directory"),

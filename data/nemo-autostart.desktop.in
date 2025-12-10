@@ -1,9 +1,9 @@
 [Desktop Entry]
 Type=Application
-Name=Nemo
-Comment=Start Nemo desktop at log in
+Name=Icarus-FM
+Comment=Start Icarus-FM desktop at log in
 Exec=icarus-fm-desktop
 OnlyShowIn=X-Cinnamon;
-AutostartCondition=GSettings org.nemo.desktop show-desktop-icons
+AutostartCondition=GSettings org.icarus-fm.desktop show-desktop-icons
 X-GNOME-AutoRestart=true
 NoDisplay=true
