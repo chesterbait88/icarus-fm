@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /usr/share/nemo/layout-editor/nemo_action_layout_editor.py
