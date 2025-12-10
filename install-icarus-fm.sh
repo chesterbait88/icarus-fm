@@ -19,9 +19,9 @@ NC='\033[0m' # No Color
 # Configuration
 GITHUB_REPO="chesterbait88/icarus-fm"
 PACKAGE_NAME="icarus-fm"
-VERSION="1.1.0"
-PACKAGE_FILE="${PACKAGE_NAME}_${VERSION}_amd64.deb"
-DOWNLOAD_URL="https://github.com/${GITHUB_REPO}/releases/download/v${VERSION}/${PACKAGE_FILE}"
+ICARUS_VERSION="1.1.0"
+PACKAGE_FILE="${PACKAGE_NAME}_${ICARUS_VERSION}_amd64.deb"
+DOWNLOAD_URL="https://github.com/${GITHUB_REPO}/releases/download/v${ICARUS_VERSION}/${PACKAGE_FILE}"
 
 # Temporary download directory
 TMP_DIR="/tmp/icarus-fm-install"
@@ -207,15 +207,15 @@ download_package() {
 
     # Define all required packages
     local packages=(
-        "icarus-fm_${VERSION}_amd64.deb"
-        "icarus-fm-data_${VERSION}_all.deb"
-        "libicarus-fm-extension1_${VERSION}_amd64.deb"
-        "gir1.2-icarus-fm-3.0_${VERSION}_amd64.deb"
+        "icarus-fm_${ICARUS_VERSION}_amd64.deb"
+        "icarus-fm-data_${ICARUS_VERSION}_all.deb"
+        "libicarus-fm-extension1_${ICARUS_VERSION}_amd64.deb"
+        "gir1.2-icarus-fm-3.0_${ICARUS_VERSION}_amd64.deb"
     )
 
     # Download each package
     for pkg in "${packages[@]}"; do
-        local url="https://github.com/${GITHUB_REPO}/releases/download/v${VERSION}/${pkg}"
+        local url="https://github.com/${GITHUB_REPO}/releases/download/v${ICARUS_VERSION}/${pkg}"
         if ! wget -q --show-progress "$url" -O "$pkg"; then
             print_error "Failed to download $pkg from GitHub"
             print_info "URL: $url"
@@ -234,10 +234,10 @@ install_package() {
 
     # Install all packages using apt
     if sudo apt-get install -y \
-        ./icarus-fm_${VERSION}_amd64.deb \
-        ./icarus-fm-data_${VERSION}_all.deb \
-        ./libicarus-fm-extension1_${VERSION}_amd64.deb \
-        ./gir1.2-icarus-fm-3.0_${VERSION}_amd64.deb 2>&1 | tee /tmp/install.log | grep -qE "(Setting up|Unpacking)"; then
+        ./icarus-fm_${ICARUS_VERSION}_amd64.deb \
+        ./icarus-fm-data_${ICARUS_VERSION}_all.deb \
+        ./libicarus-fm-extension1_${ICARUS_VERSION}_amd64.deb \
+        ./gir1.2-icarus-fm-3.0_${ICARUS_VERSION}_amd64.deb 2>&1 | tee /tmp/install.log | grep -qE "(Setting up|Unpacking)"; then
         print_success "Icarus-FM installed successfully"
     else
         print_error "Package installation failed"
