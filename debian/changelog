@@ -1,3 +1,14 @@
+icarus-fm (1.1.0) unstable; urgency=medium
+
+  * Preview pane now enabled by default - no setup required
+  * Live resize - previews instantly re-render when dragging the divider
+  * Proper taskbar integration - pins as its own app, not confused with Nemo
+  * Added StartupWMClass for correct window matching
+  * Changed application IDs to org.IcarusFM for proper desktop integration
+  * Updated documentation and changelog
+
+ -- chesterbait88 <chesterbait88@users.noreply.github.com>  Tue, 10 Dec 2024 18:00:00 +0000
+
 icarus-fm (1.0.0) unstable; urgency=medium
 
   * COMPLETE REBRAND: Renamed from nemo-preview to Icarus-FM

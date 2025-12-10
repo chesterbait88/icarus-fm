@@ -19,7 +19,7 @@ NC='\033[0m' # No Color
 # Configuration
 GITHUB_REPO="chesterbait88/icarus-fm"
 PACKAGE_NAME="icarus-fm"
-VERSION="1.0.0"
+VERSION="1.1.0"
 PACKAGE_FILE="${PACKAGE_NAME}_${VERSION}_amd64.deb"
 DOWNLOAD_URL="https://github.com/${GITHUB_REPO}/releases/download/v${VERSION}/${PACKAGE_FILE}"
 
