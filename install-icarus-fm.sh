@@ -179,6 +179,9 @@ install_build_dependencies() {
         # GTK and GLib
         "libgtk-3-dev"
         "libglib2.0-dev"
+        "libjson-glib-dev"
+        # X11
+        "libx11-dev"
         # Cinnamon/GNOME libraries
         "libcinnamon-desktop-dev"
         "libxapp-dev"
@@ -186,8 +189,9 @@ install_build_dependencies() {
         # Media metadata
         "libexempi-dev"
         "libexif-dev"
-        # XML
+        # XML and document parsing
         "libxml2-dev"
+        "libgsf-1-dev"
         # GObject Introspection
         "gobject-introspection"
         "libgirepository1.0-dev"
@@ -195,8 +199,10 @@ install_build_dependencies() {
         "cinnamon-desktop-data"
         "gsettings-desktop-schemas"
         "gvfs"
+        "gvfs-backends"
         "shared-mime-info"
         "desktop-file-utils"
+        "librsvg2-common"
     )
 
     sudo apt-get update -qq
@@ -224,6 +230,7 @@ install_optional_dependencies() {
         print_info "Installing GStreamer for video/audio preview..."
         optional_deps+=(
             "libgstreamer1.0-dev"
+            "libgstreamer-plugins-base1.0-dev"
             "libgstreamer1.0-0"
             "gstreamer1.0-plugins-base"
             "gstreamer1.0-plugins-good"
@@ -237,6 +244,7 @@ install_optional_dependencies() {
         optional_deps+=(
             "libpoppler-glib-dev"
             "libpoppler-glib8"
+            "poppler-utils"
         )
     fi
 
