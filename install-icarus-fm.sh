@@ -9,6 +9,9 @@
 
 set -e
 
+# Set to false on error to preserve build dir for debugging
+CLEANUP_ON_EXIT=true
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -257,21 +260,31 @@ download_source() {
     print_step "Downloading Icarus-FM Source"
 
     # Clean up any previous build
-    rm -rf "$INSTALL_DIR"
+    if [ -d "$INSTALL_DIR" ]; then
+        rm -rf "$INSTALL_DIR"
+    fi
     mkdir -p "$INSTALL_DIR"
     cd "$INSTALL_DIR"
 
     print_info "Cloning from GitHub..."
+    print_info "URL: https://github.com/${GITHUB_REPO}.git"
 
-    if git clone --depth 1 "https://github.com/${GITHUB_REPO}.git" icarus-fm; then
+    # Clone with visible output
+    set +e  # Temporarily disable exit on error
+    git clone --depth 1 "https://github.com/${GITHUB_REPO}.git" icarus-fm 2>&1
+    clone_result=$?
+    set -e  # Re-enable exit on error
+
+    if [ $clone_result -eq 0 ] && [ -d "$INSTALL_DIR/icarus-fm" ]; then
         print_success "Source code downloaded"
+        cd icarus-fm
     else
-        print_error "Failed to clone repository"
+        print_error "Failed to clone repository (exit code: $clone_result)"
         print_info "Check your internet connection and try again"
+        print_info "Or try manually: git clone https://github.com/${GITHUB_REPO}.git"
+        CLEANUP_ON_EXIT=false
         exit 1
     fi
-
-    cd icarus-fm
 }
 
 build_icarus_fm() {
@@ -442,7 +455,9 @@ Note: Icarus-FM is independent and\nwill NOT affect your system Nemo." \
 }
 
 cleanup() {
-    if [ -d "$INSTALL_DIR" ]; then
+    # Only cleanup on successful exit or explicit cleanup call
+    # Don't cleanup on error so user can debug
+    if [ "${CLEANUP_ON_EXIT:-true}" = "true" ] && [ -d "$INSTALL_DIR" ]; then
         rm -rf "$INSTALL_DIR"
     fi
 }
