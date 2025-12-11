@@ -48,6 +48,6 @@ debian/debhelper-build-stamp
 debian/files
 *.substvars
 *.debhelper
-
+nemo-extensions/
 obj-x86_64-linux-gnu
 nemo-extensions/libnemo-private/gschemas.compiled

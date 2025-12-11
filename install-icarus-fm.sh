@@ -263,7 +263,7 @@ download_source() {
 
     print_info "Cloning from GitHub..."
 
-    if git clone --depth 1 "https://github.com/${GITHUB_REPO}.git" icarus-fm 2>&1 | grep -v "^Cloning"; then
+    if git clone --depth 1 "https://github.com/${GITHUB_REPO}.git" icarus-fm; then
         print_success "Source code downloaded"
     else
         print_error "Failed to clone repository"
