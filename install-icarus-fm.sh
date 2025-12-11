@@ -176,8 +176,10 @@ install_build_dependencies() {
         "g++"
         "pkg-config"
         "gettext"
+        "intltool"
         # GTK and GLib
         "libgtk-3-dev"
+        "libgail-3-dev"
         "libglib2.0-dev"
         "libjson-glib-dev"
         # X11
