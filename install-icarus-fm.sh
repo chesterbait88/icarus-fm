@@ -349,6 +349,11 @@ install_icarus_fm() {
     sudo update-desktop-database /usr/local/share/applications 2>/dev/null || true
     sudo gtk-update-icon-cache /usr/local/share/icons/hicolor 2>/dev/null || true
 
+    # Update shared library cache (critical for finding libicarus-fm-extension.so)
+    print_info "Updating library cache..."
+    echo "/usr/local/lib/x86_64-linux-gnu" | sudo tee /etc/ld.so.conf.d/icarus-fm.conf >/dev/null
+    sudo ldconfig
+
     print_success "System caches updated"
 }
 
@@ -400,6 +405,10 @@ sudo glib-compile-schemas /usr/local/share/glib-2.0/schemas/ 2>/dev/null || true
 
 # Remove search helpers
 sudo rm -f /usr/local/libexec/icarus-fm-*
+
+# Remove library config and update cache
+sudo rm -f /etc/ld.so.conf.d/icarus-fm.conf
+sudo ldconfig
 
 # Update caches
 sudo update-desktop-database /usr/local/share/applications 2>/dev/null || true
