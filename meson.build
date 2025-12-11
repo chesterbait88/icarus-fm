@@ -158,7 +158,7 @@ endif
 enableEmptyView = get_option('empty_view')
 conf.set10('ENABLE_EMPTY_VIEW', enableEmptyView)
 
-conf.set_quoted('GETTEXT_PACKAGE', 'nemo')
+conf.set_quoted('GETTEXT_PACKAGE', 'icarus-fm')
 conf.set_quoted('LOCALE_DIR',  join_paths(get_option('prefix'), get_option('localedir')))
 conf.set_quoted('LOCALEDIR',   join_paths(get_option('prefix'), get_option('localedir')))
 conf.set('ENABLE_NLS', cc.has_header('libintl.h'))
@@ -178,14 +178,14 @@ nemoDataPath      = join_paths(get_option('prefix'), get_option('datadir'), 'ica
 nemoDocPath       = join_paths(get_option('prefix'), get_option('datadir'), 'doc', 'icarus-fm')
 libExecPath       = join_paths(get_option('prefix'), get_option('libexecdir'))
 # Keep this constant, in case some extensions are behind in being updated...
-nemoExtensionPath = join_paths(get_option('prefix'), get_option('libdir'), 'icarus-fm', 'extensions-3.0')
+nemoExtensionPath = join_paths(get_option('prefix'), get_option('libdir'), 'nemo', 'extensions-3.0')
 
 nemo_definitions =  [
   '-DNEMO_DATADIR="@0@"'.format(nemoDataPath),
   '-DNEMO_DOCDIR="@0@"'.format(nemoDocPath),
   '-DNEMO_EXTENSIONDIR="@0@"'.format(nemoExtensionPath),
   '-DLIBEXECDIR="@0@"'.format(libExecPath),
-  '-DG_LOG_DOMAIN="Nemo"'
+  '-DG_LOG_DOMAIN="IcarusFM"'
 ]
 
 po_subdir = join_paths(meson.project_source_root(), 'po')

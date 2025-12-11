@@ -67,7 +67,7 @@
     <value value="3" nick="base-2-full"/>
   </enum>
 
-  <schema id="org.nemo" path="/org/icarus-fm/" gettext-domain="nemo">
+  <schema id="org.icarus-fm" path="/org/icarus-fm/" gettext-domain="icarus-fm">
     <child name="preferences" schema="org.icarus-fm.preferences"/>
     <child name="icon-view" schema="org.icarus-fm.icon-view"/>
     <child name="compact-view" schema="org.icarus-fm.compact-view"/>
@@ -78,7 +78,7 @@
     <child name="search" schema="org.icarus-fm.search"/>
   </schema>
 
-  <schema id="org.icarus-fm.preferences" path="/org/icarus-fm/preferences/" gettext-domain="nemo">
+  <schema id="org.icarus-fm.preferences" path="/org/icarus-fm/preferences/" gettext-domain="icarus-fm">
     <key name="tabs-open-position" enum="org.icarus-fm.TabPosition">
       <aliases>
 	<alias value='after_current_tab' target='after-current-tab'/>
@@ -445,7 +445,7 @@
     </key>
   </schema>
 
-  <schema id="org.icarus-fm.icon-view" path="/org/icarus-fm/icon-view/" gettext-domain="nemo">
+  <schema id="org.icarus-fm.icon-view" path="/org/icarus-fm/icon-view/" gettext-domain="icarus-fm">
     <key name="captions" type="as">
       <default>[ 'none', 'size', 'date_modified' ]</default>
       <summary>List of possible captions on icons</summary>
@@ -499,7 +499,7 @@
     </key>
   </schema>
 
-  <schema id="org.icarus-fm.compact-view" path="/org/icarus-fm/compact-view/" gettext-domain="nemo">
+  <schema id="org.icarus-fm.compact-view" path="/org/icarus-fm/compact-view/" gettext-domain="icarus-fm">
     <key name="default-zoom-level" enum="org.icarus-fm.ZoomLevel">
       <default>'standard'</default>
       <summary>Default compact view zoom level</summary>
@@ -512,7 +512,7 @@
     </key>
   </schema>
 
-  <schema id="org.icarus-fm.list-view" path="/org/icarus-fm/list-view/" gettext-domain="nemo">
+  <schema id="org.icarus-fm.list-view" path="/org/icarus-fm/list-view/" gettext-domain="icarus-fm">
     <key name="default-zoom-level" enum="org.icarus-fm.ZoomLevel">
       <default>'smaller'</default>
       <summary>Default list zoom level</summary>
@@ -534,11 +534,11 @@
     </key>
   </schema>
 
-  <schema id="org.icarus-fm.sidebar-panels" path="/org/icarus-fm/sidebar-panels/" gettext-domain="nemo">
+  <schema id="org.icarus-fm.sidebar-panels" path="/org/icarus-fm/sidebar-panels/" gettext-domain="icarus-fm">
     <child name="tree" schema="org.icarus-fm.sidebar-panels.tree"/>
   </schema>
 
-  <schema id="org.icarus-fm.sidebar-panels.tree" path="/org/icarus-fm/sidebar-panels/tree/" gettext-domain="nemo">
+  <schema id="org.icarus-fm.sidebar-panels.tree" path="/org/icarus-fm/sidebar-panels/tree/" gettext-domain="icarus-fm">
     <key name="show-only-directories" type="b">
       <default>true</default>
       <summary>Only show folders in the tree side pane</summary>
@@ -546,7 +546,7 @@
     </key>
   </schema>
 
-  <schema id="org.icarus-fm.desktop" path="/org/icarus-fm/desktop/" gettext-domain="nemo">
+  <schema id="org.icarus-fm.desktop" path="/org/icarus-fm/desktop/" gettext-domain="icarus-fm">
     <key name="font" type="s">
       <default l10n="messages" context="desktop-font">'Noto Sans 10'</default>
       <summary>Desktop font</summary>
@@ -623,7 +623,7 @@
     </key>
   </schema>
 
-  <schema id="org.icarus-fm.window-state" path="/org/icarus-fm/window-state/" gettext-domain="nemo">
+  <schema id="org.icarus-fm.window-state" path="/org/icarus-fm/window-state/" gettext-domain="icarus-fm">
     <key name="geometry" type="s">
       <default>''</default>
       <summary>The geometry string for a navigation window.</summary>
@@ -704,7 +704,7 @@
     </key>
   </schema>
 
-  <schema id="org.icarus-fm.plugins" path="/org/icarus-fm/plugins/" gettext-domain="nemo">
+  <schema id="org.icarus-fm.plugins" path="/org/icarus-fm/plugins/" gettext-domain="icarus-fm">
     <key name="disabled-extensions" type="as">
       <default>[]</default>
       <summary>List of extensions -not- to load.</summary>
@@ -722,7 +722,7 @@
     </key>
   </schema>
 
-  <schema id="org.icarus-fm.preferences.menu-config" path="/org/icarus-fm/preferences/menu-config/" gettext-domain="nemo">
+  <schema id="org.icarus-fm.preferences.menu-config" path="/org/icarus-fm/preferences/menu-config/" gettext-domain="icarus-fm">
     <!-- Selection -->
     <key name="selection-menu-open" type="b">
       <default>true</default>
@@ -844,7 +844,7 @@
     </key>
   </schema>
 
-  <schema id="org.icarus-fm.search" path="/org/icarus-fm/search/" gettext-domain="nemo">
+  <schema id="org.icarus-fm.search" path="/org/icarus-fm/search/" gettext-domain="icarus-fm">
     <key name="search-files-use-regex" type="b">
       <default>false</default>
       <summary>Stores the most recent state of the file search regex toggle</summary>

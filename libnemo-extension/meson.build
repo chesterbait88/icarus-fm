@@ -83,6 +83,6 @@ pkgconfig.generate(filebase: 'libicarus-fm-extension',
   requires: [ 'gio-2.0', 'glib-2.0', 'gtk+-3.0' ],
   libraries: nemo_extension_lib,
   subdirs: 'icarus-fm',
-  variables: 'extensiondir=${libdir}/@0@/@1@'.format('icarus-fm', 'extensions-3.0'),
+  variables: 'extensiondir=${libdir}/@0@/@1@'.format('nemo', 'extensions-3.0'),
 )
 

@@ -50,4 +50,4 @@ debian/files
 *.debhelper
 
 obj-x86_64-linux-gnu
-nemo-extensions/
+nemo-extensions/libnemo-private/gschemas.compiled

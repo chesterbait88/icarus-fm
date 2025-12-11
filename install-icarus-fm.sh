@@ -1,9 +1,9 @@
 #!/bin/bash
 #
-# Icarus-FM - Interactive Installer
+# Icarus-FM - Interactive Source Installer
 # https://github.com/chesterbait88/icarus-fm
 #
-# This script installs Icarus-FM file manager with preview pane support.
+# This script builds and installs Icarus-FM file manager from source.
 # Icarus-FM is completely independent and will NOT conflict with your system Nemo.
 #
 
@@ -14,29 +14,35 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
+CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 # Configuration
 GITHUB_REPO="chesterbait88/icarus-fm"
-PACKAGE_NAME="icarus-fm"
 ICARUS_VERSION="1.1.0"
-PACKAGE_FILE="${PACKAGE_NAME}_${ICARUS_VERSION}_amd64.deb"
-DOWNLOAD_URL="https://github.com/${GITHUB_REPO}/releases/download/v${ICARUS_VERSION}/${PACKAGE_FILE}"
-
-# Temporary download directory
-TMP_DIR="/tmp/icarus-fm-install"
+INSTALL_DIR="/tmp/icarus-fm-build"
 
 #=============================================================================
 # Helper Functions
 #=============================================================================
 
 print_header() {
-    echo -e "${BLUE}============================================${NC}"
-    echo -e "${BLUE}     Icarus-FM - Interactive Installer     ${NC}"
-    echo -e "${BLUE}============================================${NC}"
-    echo ""
-    echo -e "${GREEN}Icarus-FM is completely independent${NC}"
-    echo -e "${GREEN}Will NOT conflict with system Nemo${NC}"
+    clear
+    echo -e "${CYAN}"
+    echo "  ╔═══════════════════════════════════════════════════════════╗"
+    echo "  ║                                                           ║"
+    echo "  ║   ██╗ ██████╗ █████╗ ██████╗ ██╗   ██╗███████╗           ║"
+    echo "  ║   ██║██╔════╝██╔══██╗██╔══██╗██║   ██║██╔════╝           ║"
+    echo "  ║   ██║██║     ███████║██████╔╝██║   ██║███████╗           ║"
+    echo "  ║   ██║██║     ██╔══██║██╔══██╗██║   ██║╚════██║           ║"
+    echo "  ║   ██║╚██████╗██║  ██║██║  ██║╚██████╔╝███████║           ║"
+    echo "  ║   ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝           ║"
+    echo "  ║                     FILE MANAGER                          ║"
+    echo "  ║                                                           ║"
+    echo "  ╚═══════════════════════════════════════════════════════════╝"
+    echo -e "${NC}"
+    echo -e "${GREEN}  Icarus-FM is completely independent${NC}"
+    echo -e "${GREEN}  Will NOT conflict with your system Nemo${NC}"
     echo ""
 }
 
@@ -56,6 +62,14 @@ print_info() {
     echo -e "${BLUE}ℹ${NC} $1"
 }
 
+print_step() {
+    echo ""
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${CYAN}  $1${NC}"
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo ""
+}
+
 #=============================================================================
 # System Detection
 #=============================================================================
@@ -72,7 +86,7 @@ detect_system() {
     fi
 
     # Check if Debian-based
-    if [[ "$OS_ID" != "ubuntu" && "$OS_ID" != "debian" && "$OS_ID" != "linuxmint" ]]; then
+    if [[ "$OS_ID" != "ubuntu" && "$OS_ID" != "debian" && "$OS_ID" != "linuxmint" && "$ID_LIKE" != *"ubuntu"* && "$ID_LIKE" != *"debian"* ]]; then
         print_error "This installer only supports Debian, Ubuntu, and Linux Mint"
         print_info "Detected: $OS_NAME"
         exit 1
@@ -92,7 +106,7 @@ check_root() {
 check_dependencies() {
     local missing_deps=()
 
-    for cmd in wget whiptail dpkg; do
+    for cmd in git whiptail; do
         if ! command -v "$cmd" &> /dev/null; then
             missing_deps+=("$cmd")
         fi
@@ -101,7 +115,7 @@ check_dependencies() {
     if [ ${#missing_deps[@]} -gt 0 ]; then
         print_warning "Installing required tools: ${missing_deps[*]}"
         sudo apt-get update -qq
-        sudo apt-get install -y whiptail wget 2>&1 | grep -v "^Reading" | grep -v "^Building" || true
+        sudo apt-get install -y whiptail git 2>&1 | grep -v "^Reading" | grep -v "^Building" || true
     fi
 }
 
@@ -115,9 +129,9 @@ select_features() {
         --checklist "\nChoose which preview features to enable:\n(Use SPACE to select, ENTER to confirm)" 20 70 5 \
         "IMAGES" "Images (JPEG, PNG, GIF, SVG) - Always included" ON \
         "TEXT" "Text files (code, logs, JSON, etc.) - Always included" ON \
-        "VIDEO" "Video preview with playback controls (requires GStreamer)" ON \
-        "AUDIO" "Audio preview with playback controls (requires GStreamer)" ON \
-        "PDF" "PDF preview (requires Poppler)" ON \
+        "VIDEO" "Video preview with playback controls" ON \
+        "AUDIO" "Audio preview with playback controls" ON \
+        "PDF" "PDF preview (first page)" ON \
         3>&1 1>&2 2>&3)
 
     # Check if user cancelled
@@ -143,37 +157,70 @@ select_features() {
 }
 
 #=============================================================================
-# Dependency Installation
+# Build Dependencies
 #=============================================================================
 
-install_base_dependencies() {
-    print_info "Installing base dependencies..."
+install_build_dependencies() {
+    print_step "Installing Build Dependencies"
 
-    local base_deps=(
+    print_info "This may take a few minutes..."
+
+    local build_deps=(
+        # Build tools
+        "meson"
+        "ninja-build"
+        "gcc"
+        "g++"
+        "pkg-config"
+        "gettext"
+        # GTK and GLib
+        "libgtk-3-dev"
+        "libglib2.0-dev"
+        # Cinnamon/GNOME libraries
+        "libcinnamon-desktop-dev"
+        "libxapp-dev"
+        "libnotify-dev"
+        # Media metadata
+        "libexempi-dev"
+        "libexif-dev"
+        # XML
+        "libxml2-dev"
+        # GObject Introspection
+        "gobject-introspection"
+        "libgirepository1.0-dev"
+        # Runtime dependencies
         "cinnamon-desktop-data"
-        "cinnamon-l10n"
-        "desktop-file-utils"
         "gsettings-desktop-schemas"
         "gvfs"
-        "libglib2.0-data"
         "shared-mime-info"
-        "libgtk-3-0"
-        "libglib2.0-0"
-        "libcinnamon-desktop4"
-        "libxapp1"
+        "desktop-file-utils"
     )
 
     sudo apt-get update -qq
-    sudo apt-get install -y "${base_deps[@]}" 2>&1 | grep -v "^Reading" | grep -v "^Building" || true
-    print_success "Base dependencies installed"
+
+    # Install with progress
+    local total=${#build_deps[@]}
+    local count=0
+
+    for dep in "${build_deps[@]}"; do
+        count=$((count + 1))
+        echo -ne "\r${BLUE}[$count/$total]${NC} Installing $dep...                    "
+        sudo apt-get install -y "$dep" >/dev/null 2>&1 || true
+    done
+    echo ""
+
+    print_success "Build dependencies installed"
 }
 
 install_optional_dependencies() {
+    print_step "Installing Optional Dependencies"
+
     local optional_deps=()
 
     if [ "$ENABLE_VIDEO" = true ] || [ "$ENABLE_AUDIO" = true ]; then
         print_info "Installing GStreamer for video/audio preview..."
         optional_deps+=(
+            "libgstreamer1.0-dev"
             "libgstreamer1.0-0"
             "gstreamer1.0-plugins-base"
             "gstreamer1.0-plugins-good"
@@ -185,88 +232,179 @@ install_optional_dependencies() {
     if [ "$ENABLE_PDF" = true ]; then
         print_info "Installing Poppler for PDF preview..."
         optional_deps+=(
+            "libpoppler-glib-dev"
             "libpoppler-glib8"
         )
     fi
 
     if [ ${#optional_deps[@]} -gt 0 ]; then
-        sudo apt-get install -y "${optional_deps[@]}" 2>&1 | grep -v "^Reading" | grep -v "^Building" || true
+        for dep in "${optional_deps[@]}"; do
+            echo -ne "\r${BLUE}→${NC} Installing $dep...                    "
+            sudo apt-get install -y "$dep" >/dev/null 2>&1 || true
+        done
+        echo ""
         print_success "Optional dependencies installed"
+    else
+        print_info "No optional dependencies selected"
     fi
 }
 
 #=============================================================================
-# Package Download and Installation
+# Download and Build
 #=============================================================================
 
-download_package() {
-    print_info "Downloading Icarus-FM packages..."
+download_source() {
+    print_step "Downloading Icarus-FM Source"
 
-    mkdir -p "$TMP_DIR"
-    cd "$TMP_DIR"
+    # Clean up any previous build
+    rm -rf "$INSTALL_DIR"
+    mkdir -p "$INSTALL_DIR"
+    cd "$INSTALL_DIR"
 
-    # Define all required packages
-    local packages=(
-        "icarus-fm_${ICARUS_VERSION}_amd64.deb"
-        "icarus-fm-data_${ICARUS_VERSION}_all.deb"
-        "libicarus-fm-extension1_${ICARUS_VERSION}_amd64.deb"
-        "gir1.2-icarus-fm-3.0_${ICARUS_VERSION}_amd64.deb"
-    )
+    print_info "Cloning from GitHub..."
 
-    # Download each package
-    for pkg in "${packages[@]}"; do
-        local url="https://github.com/${GITHUB_REPO}/releases/download/v${ICARUS_VERSION}/${pkg}"
-        if ! wget -q --show-progress "$url" -O "$pkg"; then
-            print_error "Failed to download $pkg from GitHub"
-            print_info "URL: $url"
-            print_warning "Please check if the release exists on GitHub"
-            exit 1
-        fi
-    done
-
-    print_success "All packages downloaded successfully"
-}
-
-install_package() {
-    print_info "Installing Icarus-FM..."
-
-    cd "$TMP_DIR"
-
-    # Install all packages using apt
-    if sudo apt-get install -y \
-        ./icarus-fm_${ICARUS_VERSION}_amd64.deb \
-        ./icarus-fm-data_${ICARUS_VERSION}_all.deb \
-        ./libicarus-fm-extension1_${ICARUS_VERSION}_amd64.deb \
-        ./gir1.2-icarus-fm-3.0_${ICARUS_VERSION}_amd64.deb 2>&1 | tee /tmp/install.log | grep -qE "(Setting up|Unpacking)"; then
-        print_success "Icarus-FM installed successfully"
+    if git clone --depth 1 "https://github.com/${GITHUB_REPO}.git" icarus-fm 2>&1 | grep -v "^Cloning"; then
+        print_success "Source code downloaded"
     else
-        print_error "Package installation failed"
-        print_info "Check /tmp/install.log for details"
-        sudo apt-get install -f -y >/dev/null 2>&1 || true
+        print_error "Failed to clone repository"
+        print_info "Check your internet connection and try again"
         exit 1
     fi
+
+    cd icarus-fm
+}
+
+build_icarus_fm() {
+    print_step "Building Icarus-FM"
+
+    cd "$INSTALL_DIR/icarus-fm"
+
+    print_info "Configuring build..."
+    if meson setup builddir 2>&1 | tail -5; then
+        print_success "Build configured"
+    else
+        print_error "Meson configuration failed"
+        exit 1
+    fi
+
+    print_info "Compiling (this may take a few minutes)..."
+
+    # Get total number of build targets for progress
+    if ninja -C builddir 2>&1 | while read -r line; do
+        if [[ "$line" =~ ^\[([0-9]+)/([0-9]+)\] ]]; then
+            current="${BASH_REMATCH[1]}"
+            total="${BASH_REMATCH[2]}"
+            percent=$((current * 100 / total))
+            printf "\r${BLUE}[%3d%%]${NC} Building... [%s/%s]" "$percent" "$current" "$total"
+        fi
+    done; then
+        echo ""
+        print_success "Build completed successfully"
+    else
+        echo ""
+        print_error "Build failed"
+        exit 1
+    fi
+}
+
+install_icarus_fm() {
+    print_step "Installing Icarus-FM"
+
+    cd "$INSTALL_DIR/icarus-fm"
+
+    print_info "Installing to system..."
+
+    if sudo ninja -C builddir install 2>&1 | grep -v "^Installing" | tail -3; then
+        print_success "Icarus-FM installed successfully"
+    else
+        print_error "Installation failed"
+        exit 1
+    fi
+
+    # Update caches
+    print_info "Updating system caches..."
+    sudo update-desktop-database /usr/local/share/applications 2>/dev/null || true
+    sudo gtk-update-icon-cache /usr/local/share/icons/hicolor 2>/dev/null || true
+
+    print_success "System caches updated"
 }
 
 #=============================================================================
 # Post-Installation
 #=============================================================================
 
+create_uninstall_script() {
+    print_info "Creating uninstall script..."
+
+    sudo tee /usr/local/bin/icarus-fm-uninstall.sh > /dev/null << 'UNINSTALL_EOF'
+#!/bin/bash
+# Icarus-FM Uninstaller
+
+echo "Uninstalling Icarus-FM..."
+
+# Remove binaries
+sudo rm -f /usr/local/bin/icarus-fm
+sudo rm -f /usr/local/bin/icarus-fm-desktop
+sudo rm -f /usr/local/bin/icarus-fm-autorun-software
+sudo rm -f /usr/local/bin/icarus-fm-connect-server
+sudo rm -f /usr/local/bin/icarus-fm-open-with
+sudo rm -f /usr/local/bin/icarus-fm-extensions-list
+sudo rm -f /usr/local/bin/icarus-fm-action-layout-editor
+sudo rm -f /usr/local/bin/icarus-fm-uninstall.sh
+
+# Remove data
+sudo rm -rf /usr/local/share/icarus-fm
+sudo rm -rf /usr/local/share/doc/icarus-fm
+sudo rm -f /usr/local/share/applications/icarus-fm*.desktop
+sudo rm -f /usr/local/share/man/man1/icarus-fm*.1
+sudo rm -f /usr/local/share/dbus-1/services/org.IcarusFM.service
+sudo rm -f /usr/local/share/dbus-1/services/icarus-fm.FileManager1.service
+sudo rm -f /usr/local/share/polkit-1/actions/org.icarus-fm.root.policy
+
+# Remove icons
+for size in 16 22 24 32 48 96 scalable; do
+    sudo rm -f /usr/local/share/icons/hicolor/${size}x${size}/apps/icarus-fm.png 2>/dev/null
+    sudo rm -f /usr/local/share/icons/hicolor/${size}/apps/icarus-fm.svg 2>/dev/null
+done
+
+# Remove libraries
+sudo rm -f /usr/local/lib/x86_64-linux-gnu/libicarus-fm-extension*
+sudo rm -rf /usr/local/lib/x86_64-linux-gnu/girepository-1.0/IcarusFM*
+
+# Remove schemas
+sudo rm -f /usr/local/share/glib-2.0/schemas/org.icarus-fm*.xml
+sudo glib-compile-schemas /usr/local/share/glib-2.0/schemas/ 2>/dev/null || true
+
+# Remove search helpers
+sudo rm -f /usr/local/libexec/icarus-fm-*
+
+# Update caches
+sudo update-desktop-database /usr/local/share/applications 2>/dev/null || true
+sudo gtk-update-icon-cache /usr/local/share/icons/hicolor 2>/dev/null || true
+
+echo "Icarus-FM has been uninstalled."
+UNINSTALL_EOF
+
+    sudo chmod +x /usr/local/bin/icarus-fm-uninstall.sh
+    print_success "Uninstall script created at /usr/local/bin/icarus-fm-uninstall.sh"
+}
+
 launch_icarus_fm() {
     print_info "Launching Icarus-FM..."
 
     # Launch icarus-fm in the background
     nohup icarus-fm >/dev/null 2>&1 &
-    sleep 1
+    sleep 2
 
     if pgrep -x "icarus-fm" >/dev/null; then
         print_success "Icarus-FM launched successfully"
     else
-        print_success "Icarus-FM installed (you can launch it from your applications menu)"
+        print_success "Icarus-FM installed (launch from applications menu or run 'icarus-fm')"
     fi
 }
 
 show_completion_message() {
-    local enabled_features="• Images (JPEG, PNG, GIF, SVG)\n• Text files (code, logs, JSON, etc.)"
+    local enabled_features="• Images (JPEG, PNG, GIF, SVG)\n• Text files (code, logs, configs)"
 
     if [ "$ENABLE_VIDEO" = true ]; then
         enabled_features="$enabled_features\n• Video preview with playback"
@@ -283,24 +421,29 @@ show_completion_message() {
 Enabled features:\n\
 $enabled_features\n\n\
 Usage:\n\
-• Launch Icarus-FM from your applications menu\n\
-• Or run 'icarus-fm' from the terminal\n\
+• Launch from your applications menu\n\
+• Or run 'icarus-fm' in terminal\n\
 • Press F7 to toggle the preview pane\n\
-• Drag the divider to resize the preview pane\n\n\
-Note: Icarus-FM is independent and will NOT affect your system Nemo." \
-        25 70
+• Drag the divider to resize preview\n\n\
+To uninstall:\n\
+  sudo icarus-fm-uninstall.sh\n\n\
+Note: Icarus-FM is independent and\nwill NOT affect your system Nemo." \
+        25 55
 
     echo ""
-    print_success "Installation complete!"
+    echo -e "${GREEN}════════════════════════════════════════════════════════════${NC}"
+    echo -e "${GREEN}  Installation Complete!${NC}"
+    echo -e "${GREEN}════════════════════════════════════════════════════════════${NC}"
     echo ""
-    print_info "Launch Icarus-FM from your applications menu or run 'icarus-fm'"
-    print_info "Press F7 in Icarus-FM to toggle the preview pane"
+    echo -e "  ${CYAN}Launch:${NC}     icarus-fm"
+    echo -e "  ${CYAN}Toggle:${NC}     F7 for preview pane"
+    echo -e "  ${CYAN}Uninstall:${NC}  sudo icarus-fm-uninstall.sh"
     echo ""
 }
 
 cleanup() {
-    if [ -d "$TMP_DIR" ]; then
-        rm -rf "$TMP_DIR"
+    if [ -d "$INSTALL_DIR" ]; then
+        rm -rf "$INSTALL_DIR"
     fi
 }
 
@@ -320,14 +463,16 @@ main() {
     select_features
 
     # Installation
-    install_base_dependencies
+    install_build_dependencies
     install_optional_dependencies
-    download_package
-    install_package
+    download_source
+    build_icarus_fm
+    install_icarus_fm
 
     # Post-installation
-    launch_icarus_fm
+    create_uninstall_script
     cleanup
+    launch_icarus_fm
     show_completion_message
 }
 

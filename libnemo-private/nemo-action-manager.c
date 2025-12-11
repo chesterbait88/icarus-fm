@@ -309,7 +309,7 @@ reload_actions_layout (NemoActionManager *action_manager)
     g_clear_object (&priv->json_parser);
 
     JsonParser *parser = json_parser_new ();
-    path = g_build_filename (g_get_user_config_dir (), "nemo", LAYOUT_FILENAME, NULL);
+    path = g_build_filename (g_get_user_config_dir (), "icarus-fm", LAYOUT_FILENAME, NULL);
 
     if (!json_parser_load_from_file (parser, path, &error)) {
         if (error != NULL) {
@@ -369,7 +369,7 @@ monitor_nemo_config_dir (NemoActionManager *action_manager)
     GFile *file;
     GFileMonitor *monitor;
 
-    g_autofree gchar *path = g_build_filename (g_get_user_config_dir (), "nemo", NULL);
+    g_autofree gchar *path = g_build_filename (g_get_user_config_dir (), "icarus-fm", NULL);
 
     file = g_file_new_for_path (path);
     monitor = g_file_monitor_directory (file, G_FILE_MONITOR_WATCH_MOVES | G_FILE_MONITOR_SEND_MOVED, NULL, NULL);

@@ -357,7 +357,7 @@ on_restart_clicked (GtkWidget *button, NemoExtensionConfigWidget *widget)
      * not be possible or exceedingly tedious, but we can cover the default view in
      * each window. */
 
-    g_spawn_command_line_async ("sh -c \"nemo --quit && sleep 1 && nemo\"", NULL);
+    g_spawn_command_line_async ("sh -c \"icarus-fm --quit && sleep 1 && icarus-fm\"", NULL);
 }
 
 static void

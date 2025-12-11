@@ -166,7 +166,7 @@ nemo_dbus_manager_init (NemoDBusManager *self)
 
   connection = g_application_get_dbus_connection (g_application_get_default ());
 
-  self->object_manager = g_dbus_object_manager_server_new ("/org/Nemo");
+  self->object_manager = g_dbus_object_manager_server_new ("/org/IcarusFM");
   self->file_operations = nemo_dbus_file_operations_skeleton_new ();
 
   g_signal_connect (self->file_operations,
@@ -187,7 +187,7 @@ nemo_dbus_manager_init (NemoDBusManager *self)
 		    self);
 
   g_dbus_interface_skeleton_export (G_DBUS_INTERFACE_SKELETON (self->file_operations), connection,
-				    "/org/Nemo", NULL);
+				    "/org/IcarusFM", NULL);
 
   g_dbus_object_manager_server_set_connection (self->object_manager, connection);
 }

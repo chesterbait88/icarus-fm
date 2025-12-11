@@ -43,7 +43,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#define NEMO_USER_DIRECTORY_NAME "nemo"
+#define NEMO_USER_DIRECTORY_NAME "icarus-fm"
 
 #define DESKTOP_DIRECTORY_NAME "Desktop"
 #define LEGACY_DESKTOP_DIRECTORY_NAME ".gnome-desktop"

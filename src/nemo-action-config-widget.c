@@ -375,7 +375,7 @@ on_open_folder_clicked (GtkWidget *button, NemoActionConfigWidget *widget)
 static void
 on_layout_editor_clicked (GtkWidget *button, NemoActionConfigWidget *widget)
 {
-    g_spawn_command_line_async ("nemo-action-layout-editor", NULL);
+    g_spawn_command_line_async ("icarus-fm-action-layout-editor", NULL);
 }
 
 static void

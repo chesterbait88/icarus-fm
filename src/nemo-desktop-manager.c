@@ -557,7 +557,7 @@ on_failsafe_timeout (NemoDesktopManager *manager)
      * on_run_state_changed.  A combination of no proxy, no owner and
      * no timeout id will put us in FALLBACK mode */
 
-    g_warning ("nemo-desktop: Desktop failsafe timeout reached, applying fallback behavior");
+    g_warning ("icarus-fm-desktop: Desktop failsafe timeout reached, applying fallback behavior");
 
     priv->failsafe_timeout_id = 0;
 
@@ -741,7 +741,7 @@ nemo_desktop_manager_init (NemoDesktopManager *manager)
     g_application_hold (G_APPLICATION (nemo_application_get_singleton ()));
 
     if (is_cinnamon_desktop ()) {
-         g_message ("nemo-desktop: session is cinnamon, establishing proxy");
+         g_message ("icarus-fm-desktop: session is cinnamon, establishing proxy");
 
         nemo_cinnamon_proxy_new_for_bus (G_BUS_TYPE_SESSION,
                                          G_DBUS_PROXY_FLAGS_NONE,
@@ -751,7 +751,7 @@ nemo_desktop_manager_init (NemoDesktopManager *manager)
                                          (GAsyncReadyCallback) on_proxy_created,
                                          manager);
     } else {
-        g_message ("nemo-desktop: session is not cinnamon (checked XDG_SESSION_DESKTOP,"
+        g_message ("icarus-fm-desktop: session is not cinnamon (checked XDG_SESSION_DESKTOP,"
                    "DESKTOP_SESSION environment variables.) Applying default behavior");
 
         priv->other_desktop = TRUE;

@@ -686,9 +686,9 @@ nemo_main_application_local_command_line (GApplication *application,
 		{ "fix-cache", '\0', 0, G_OPTION_ARG_NONE, &fix_cache,
 		  N_("Repair the user thumbnail cache - this can be useful if you're having trouble with file thumbnails.  Must be run as root"), NULL },
         { "debug", 0, 0, G_OPTION_ARG_NONE, &debug,
-          "Enable debugging code.  Example usage: 'NEMO_DEBUG=Actions,Window nemo --debug'.  Use NEMO_DEBUG=help for more topics.", NULL },
-		{ "quit", 'q', 0, G_OPTION_ARG_NONE, &kill_shell, 
-		  N_("Quit Nemo."), NULL },
+          "Enable debugging code.  Example usage: 'NEMO_DEBUG=Actions,Window icarus-fm --debug'.  Use NEMO_DEBUG=help for more topics.", NULL },
+		{ "quit", 'q', 0, G_OPTION_ARG_NONE, &kill_shell,
+		  N_("Quit Icarus-FM."), NULL },
 		{ G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, &remaining, NULL,  N_("[URI...]") },
 
 		{ NULL }
@@ -716,13 +716,13 @@ nemo_main_application_local_command_line (GApplication *application,
 	}
 
 	if (version) {
-		g_print ("nemo " VERSION "\n");
+		g_print ("icarus-fm " VERSION "\n");
 		goto out;
 	}
 
     if (debug) {
 #if (GLIB_CHECK_VERSION(2,80,0))
-        const gchar* const domains[] = { "Nemo", NULL };
+        const gchar* const domains[] = { "IcarusFM", NULL };
         g_log_writer_default_set_debug_domains (domains);
 #else
         g_setenv ("G_MESSAGES_DEBUG", "all", TRUE);
@@ -769,7 +769,7 @@ nemo_main_application_local_command_line (GApplication *application,
     g_application_register (application, NULL, &error);
 
 	if (error != NULL) {
-        g_debug ("Could not register nemo as a service, trying as a remote: %s", error->message);
+        g_debug ("Could not register icarus-fm as a service, trying as a remote: %s", error->message);
         g_clear_error (&error);
     } else {
         goto post_registration;
@@ -780,7 +780,7 @@ nemo_main_application_local_command_line (GApplication *application,
     g_application_register (application, NULL, &error);
 
     if (error != NULL) {
-        g_printerr ("Could not register nemo as a remote: %s\n", error->message);
+        g_printerr ("Could not register icarus-fm as a remote: %s\n", error->message);
         g_clear_error (&error);
 
         *exit_status = EXIT_FAILURE;
@@ -869,7 +869,7 @@ menu_state_changed_callback (NemoMainApplication *self)
                                          GTK_DIALOG_MODAL,
                                          GTK_MESSAGE_INFO,
                                          GTK_BUTTONS_OK,
-                                         _("Nemo's main menu is now hidden"));
+                                         _("Icarus-FM's main menu is now hidden"));
 
         gchar *secondary;
         secondary = g_strdup_printf (_("You have chosen to hide the main menu.  You can get it back temporarily by:\n\n"
@@ -909,7 +909,7 @@ nemo_main_application_continue_startup (NemoApplication *app)
 	self->priv->dbus_manager = nemo_dbus_manager_new ();
 	self->priv->fdb_manager = nemo_freedesktop_dbus_new ();
 
-    /* Check the user's ~/.config/nemo directory and post warnings
+    /* Check the user's ~/.config/icarus-fm directory and post warnings
      * if there are problems.
      */
 

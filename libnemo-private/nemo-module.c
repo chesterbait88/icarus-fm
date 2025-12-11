@@ -166,22 +166,39 @@ nemo_module_load_file (const char *filename)
     }
 }
 
+static gboolean
+module_filename_is_blocked (const char *name)
+{
+	/* Skip libnemo-python.so to avoid GIR type conflicts with original Nemo.
+	 * The Python extension loader registers Nemo GIR types on load, which
+	 * conflicts when both Nemo and Icarus-FM are installed. */
+	if (g_strcmp0 (name, "libnemo-python.so") == 0) {
+		g_message ("Skipping %s to avoid GIR type conflicts", name);
+		return TRUE;
+	}
+	return FALSE;
+}
+
 static void
 load_module_dir (const char *dirname)
 {
 	GDir *dir;
-	
+
 	dir = g_dir_open (dirname, 0, NULL);
-	
+
 	if (dir) {
 		const char *name;
-		
+
 		while ((name = g_dir_read_name (dir))) {
 			if (g_str_has_suffix (name, "." G_MODULE_SUFFIX)) {
+				if (module_filename_is_blocked (name)) {
+					continue;
+				}
+
 				char *filename;
 
-				filename = g_build_filename (dirname, 
-							     name, 
+				filename = g_build_filename (dirname,
+							     name,
 							     NULL);
                 nemo_module_load_file (filename);
 				g_free (filename);

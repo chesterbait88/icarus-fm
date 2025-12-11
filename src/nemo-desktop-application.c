@@ -286,13 +286,13 @@ nemo_desktop_application_local_command_line (GApplication *application,
     }
 
     if (version) {
-        g_print ("nemo-desktop " VERSION "\n");
+        g_print ("icarus-fm-desktop " VERSION "\n");
         goto out;
     }
 
     if (debug) {
 #if (GLIB_CHECK_VERSION(2,80,0))
-        const gchar* const domains[] = { "Nemo", NULL };
+        const gchar* const domains[] = { "IcarusFM", NULL };
         g_log_writer_default_set_debug_domains (domains);
 #else
         g_setenv ("G_MESSAGES_DEBUG", "all", TRUE);
@@ -300,8 +300,8 @@ nemo_desktop_application_local_command_line (GApplication *application,
     }
 
     if (nemo_user_is_root () && !nemo_treating_root_as_normal ()) {
-        g_printerr ("nemo-desktop cannot be run as root, please try again as a normal user.\n"
-                    "Check 'man nemo' to see how to change this behavior.");
+        g_printerr ("icarus-fm-desktop cannot be run as root, please try again as a normal user.\n"
+                    "Check 'man icarus-fm' to see how to change this behavior.");
         goto out;
     }
 
