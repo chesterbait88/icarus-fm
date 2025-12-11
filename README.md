@@ -24,22 +24,23 @@ Based on Nemo 6.6.1 codebase with ~800 lines of new preview code, fully rebrande
 
 ## Features
 
-### ✨ Preview Support
+### Preview Support
 
 | Type | Formats | Status |
 |------|---------|--------|
-| **Images** | JPEG, PNG, BMP, SVG, WEBP, ICO | ✅ Built-in |
-| **Animated GIFs** | GIF animations with proper timing | ✅ Built-in |
-| **Text Files** | TXT, MD, LOG, JSON, XML, YAML, code files | ✅ Built-in |
-| **Videos** | MP4, MKV, AVI, WEBM, etc. with playback controls | ✅ Optional (GStreamer) |
-| **Audio** | MP3, FLAC, OGG, WAV, etc. with playback controls | ✅ Optional (GStreamer) |
-| **PDFs** | First page rendering | ✅ Optional (Poppler) |
+| **Images** | JPEG, PNG, BMP, SVG, WEBP, ICO | Built-in |
+| **Animated GIFs** | GIF animations with proper timing | Built-in |
+| **Text Files** | TXT, MD, LOG, JSON, XML, YAML, code files | Built-in |
+| **Videos** | MP4, MKV, AVI, WEBM, etc. with playback controls | Optional (GStreamer) |
+| **Audio** | MP3, FLAC, OGG, WAV, etc. with playback controls | Optional (GStreamer) |
+| **PDFs** | First page rendering | Optional (Poppler) |
 
-### 🎨 User Experience
+### User Experience
 
 - **Enabled by Default**: Preview pane opens automatically - no setup required
 - **Live Resize**: Previews instantly resize as you drag the divider
 - **F7 Keyboard Shortcut**: Toggle preview pane on/off
+- **Nemo Extensions Work**: Compatible with existing C-based Nemo extensions
 - **Independent Identity**: Pins to taskbar separately from system Nemo
 - **Smooth Integration**: Feels native, not a bolt-on
 - **Graceful Fallback**: Works even without optional dependencies
@@ -57,42 +58,58 @@ Based on Nemo 6.6.1 codebase with ~800 lines of new preview code, fully rebrande
 
 ## Installation
 
-### 🚀 Quick Install (Recommended)
+### Quick Install (Recommended)
 
 Download and run the interactive installer:
 
 ```bash
-wget https://github.com/chesterbait88/icarus-fm/releases/latest/download/install-icarus-fm.sh
+wget https://raw.githubusercontent.com/chesterbait88/icarus-fm/master/install-icarus-fm.sh
 chmod +x install-icarus-fm.sh
 ./install-icarus-fm.sh
 ```
 
 The installer will:
-1. ✅ Detect your system
-2. ✅ Let you choose which features to enable
-3. ✅ Install required dependencies
-4. ✅ Download and install the package
-5. ✅ Launch Icarus-FM
+1. Detect your system (Debian, Ubuntu, Linux Mint)
+2. Let you choose which preview features to enable (video, audio, PDF)
+3. Install all required build dependencies
+4. Download and compile from source
+5. Install to your system
+6. Create an uninstall script
+7. Launch Icarus-FM
 
-### 📦 Manual Installation
-
-Download the `.deb` files from the [latest release](https://github.com/chesterbait88/icarus-fm/releases/latest):
+### Manual Installation (Build from Source)
 
 ```bash
-# Install the packages
-sudo dpkg -i icarus-fm_*.deb icarus-fm-data_*.deb libicarus-fm-extension1_*.deb gir1.2-icarus-fm-3.0_*.deb
+# Install build dependencies
+sudo apt install meson ninja-build libgtk-3-dev libglib2.0-dev \
+  libcinnamon-desktop-dev libxapp-dev libnotify-dev libexempi-dev \
+  libexif-dev libxml2-dev gobject-introspection libgirepository1.0-dev
 
-# Fix any missing dependencies
-sudo apt-get install -f
+# Clone the repository
+git clone https://github.com/chesterbait88/icarus-fm.git
+cd icarus-fm
 
-# Optional: Enable video/audio preview
-sudo apt-get install libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-gtk3
+# Build
+meson setup builddir
+ninja -C builddir
 
-# Optional: Enable PDF preview
-sudo apt-get install libpoppler-glib8
+# Install
+sudo ninja -C builddir install
 
-# Launch Icarus-FM
+# Launch
 icarus-fm
+```
+
+### Optional Dependencies
+
+Install these for additional preview features:
+
+```bash
+# Video and Audio preview (with playback controls)
+sudo apt install gstreamer1.0-plugins-good gstreamer1.0-gtk3 gstreamer1.0-libav
+
+# PDF preview
+sudo apt install libpoppler-glib8
 ```
 
 ## Usage
@@ -116,10 +133,27 @@ The preview pane automatically detects file types and shows appropriate previews
 - **PDFs**: First page rendered as image
 - **Others**: Shows file icon
 
+## Uninstalling
+
+### If installed with the installer script:
+
+```bash
+sudo icarus-fm-uninstall.sh
+```
+
+### If installed manually with ninja:
+
+```bash
+cd icarus-fm
+sudo ninja -C builddir uninstall
+```
+
+Your settings and files are not affected. Your system Nemo file manager will continue to work normally.
+
 ## System Requirements
 
 - **OS**: Debian 11+, Ubuntu 20.04+, or Linux Mint 20+
-- **Desktop**: Cinnamon (recommended) or any DE using Nemo
+- **Desktop**: Cinnamon (recommended) or any GTK-based desktop environment
 - **Architecture**: x86_64 / amd64
 
 ### Optional Dependencies
@@ -128,40 +162,6 @@ The preview pane automatically detects file types and shows appropriate previews
 |---------|---------|------|
 | Video/Audio | `gstreamer1.0-*` | ~15 MB |
 | PDF Preview | `libpoppler-glib8` | ~2 MB |
-
-## Building from Source
-
-See [BUILD_AND_RELEASE.md](BUILD_AND_RELEASE.md) for detailed instructions.
-
-### Quick Build
-
-```bash
-# Install build dependencies
-sudo apt-get build-dep nemo
-sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libpoppler-glib-dev
-
-# Clone and build
-git clone https://github.com/chesterbait88/icarus-fm.git
-cd icarus-fm
-git checkout master
-
-# Build .deb package
-dpkg-buildpackage -us -uc -b
-
-# Install
-cd ..
-sudo dpkg -i icarus-fm_*.deb icarus-fm-data_*.deb libicarus-fm-extension1_*.deb gir1.2-icarus-fm-3.0_*.deb
-```
-
-## Uninstalling
-
-To remove Icarus-FM:
-
-```bash
-sudo apt-get remove icarus-fm
-```
-
-Your settings and files are not affected. Your system Nemo file manager will continue to work normally.
 
 ## Development
 
@@ -173,9 +173,12 @@ icarus-fm/
 │   ├── nemo-window-slot.c    # Main preview pane implementation (~800 lines)
 │   ├── nemo-window-slot.h    # Preview widget definitions
 │   ├── nemo-window-menus.c   # F7 toggle action
-│   └── nemo-main.c            # GStreamer initialization
-├── debian/                    # Debian packaging
-├── docs/                      # Documentation
+│   └── nemo-main.c           # GStreamer initialization
+├── libnemo-private/          # Core library
+│   └── org.icarus-fm.gschema.xml  # GSettings schema
+├── gresources/               # UI resources
+│   └── nemo-shell-ui.xml     # Menu definitions
+├── docs/                     # Documentation
 │   ├── PREVIEW_PANE_CHANGELOG.md
 │   └── video-preview-setup.md
 └── install-icarus-fm.sh      # Interactive installer
@@ -226,10 +229,12 @@ See [docs/PREVIEW_PANE_CHANGELOG.md](docs/PREVIEW_PANE_CHANGELOG.md) for detaile
 ### Latest Release: v1.1.0
 
 **New in v1.1.0:**
+- **Nemo extensions now work!** - Compatible C-based extensions load automatically
 - **Preview pane enabled by default** - No more going to settings to enable it
 - **Live resize** - Previews instantly re-render when you drag the divider
 - **Taskbar integration** - Pins to taskbar as its own app, not confused with system Nemo
-- **Unique application ID** - `org.IcarusFM` for proper desktop integration
+- **Complete branding separation** - Independent GSettings, config directories, and D-Bus paths
+- **Build from source installer** - No more .deb packages, always get the latest code
 
 **v1.0.0:**
 - Complete rebrand from Nemo to Icarus-FM
@@ -245,7 +250,7 @@ See [docs/PREVIEW_PANE_CHANGELOG.md](docs/PREVIEW_PANE_CHANGELOG.md) for detaile
 
 <div align="center">
 
-**Made with ❤️ for the Linux community**
+**Made with love for the Linux community**
 
 [Report Bug](https://github.com/chesterbait88/icarus-fm/issues) • [Request Feature](https://github.com/chesterbait88/icarus-fm/issues)
 
